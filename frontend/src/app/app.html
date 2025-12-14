@@ -1,0 +1,102 @@
+<div class="app-container">
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="logo">
+      <span class="logo-main">Microservices Dashboard</span>
+      <span class="logo-sub">Angular · OAuth2 · Keycloak</span>
+    </div>
+
+    <div class="user-actions">
+      <!-- Si plus tard tu gères l'état connecté/déconnecté, tu pourras conditionner ce bouton -->
+      <button class="btn btn-outline" (click)="logout()">
+        Se déconnecter
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="app-main">
+
+    <!-- Bloc intro -->
+    <section class="card hero">
+      <h1>Front Angular sécurisé</h1>
+      <p>
+        Cette interface communique avec vos microservices sécurisés OAuth2 :
+      </p>
+      <ul>
+        <li><strong>Keycloak</strong> pour l’authentification utilisateur</li>
+        <li><strong>Service 1</strong> (<code>/api/private</code>) protégé par JWT</li>
+        <li><strong>Service 2</strong> appelé en machine-to-machine (<code>client_credentials</code>)</li>
+      </ul>
+    </section>
+
+    <!-- Grille des panneaux -->
+    <section class="grid">
+
+      <!-- Colonne gauche : statut -->
+      <section class="card status">
+        <h2>Statut d’authentification</h2>
+
+        <!-- Version simple : toujours connecté -->
+        <div>
+          <p class="status-ok">✅ Vous êtes connecté.</p>
+          <p class="hint">
+            Vous pouvez maintenant appeler l’API sécurisée de <strong>Service&nbsp;1</strong>.<br>
+            Ce service appellera <strong>Service&nbsp;2</strong> en interne (machine-to-machine).
+          </p>
+        </div>
+
+        <!--
+        Si tu ajoutes une gestion réelle de l'état connecté :
+        <ng-container *ngIf="isLoggedIn; else notLoggedIn">
+          ...
+        </ng-container>
+        -->
+      </section>
+
+      <!-- Colonne droite : appel API -->
+      <section class="card api-panel">
+        <h2>Appel des microservices</h2>
+
+        <!-- Actions -->
+        <div class="api-actions">
+          <button
+            class="btn btn-primary"
+            (click)="callApi()"
+            [disabled]="isCalling">
+            <span *ngIf="!isCalling">Appeler Service 1 (<code>/api/private</code>)</span>
+            <span *ngIf="isCalling">Appel en cours...</span>
+          </button>
+        </div>
+
+        <!-- Résultat -->
+        <div class="result-block" *ngIf="apiResponse">
+          <h3>Réponse de l’API</h3>
+          <pre>{{ apiResponse }}</pre>
+        </div>
+
+        <!-- Erreur éventuelle -->
+        <div class="error-block" *ngIf="errorMessage">
+          <h3>Erreur</h3>
+          <p>{{ errorMessage }}</p>
+        </div>
+
+        <!-- Explication technique -->
+        <p class="hint small">
+          Techniquement : Angular envoie le <strong>token utilisateur</strong> vers <strong>Service&nbsp;1</strong>.<br>
+          Service&nbsp;1 obtient un <strong>token client_credentials</strong> auprès de Keycloak,
+          appelle <strong>Service&nbsp;2</strong>, puis vous renvoie une réponse combinée.
+        </p>
+      </section>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="app-footer">
+    <span>Demo Angular · OAuth2 · Microservices · Keycloak</span>
+  </footer>
+
+</div>
